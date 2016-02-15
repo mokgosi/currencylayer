@@ -1,0 +1,80 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tweet
+ *
+ * @ORM\Table(name="s")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TweetRepository")
+ */
+class Tweet
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="text", type="text")
+     */
+    private $text;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="user_name", type="string", length=255)
+     */
+    private $userName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="user_screen_name", type="string", length=255)
+     */
+    private $screenName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="user_profile_img", type="string", length=255)
+     */
+    private $profileImg;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="retweet_count", type="integer")
+     */
+    private $retweetCount;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="favourite_count", type="integer")
+     */
+    private $favouriteCount;
+    
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="geo", type="string", length=255)
+     */
+    private $geo;
+
+}

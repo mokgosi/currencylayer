@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="form-group">
+        {{ form_start(form,{'action': path('search')}) }}
+        <div class="input-medium margin-top-10">
+            {{ form_widget(form.from, {'attr': {'class': 'form-control select2'}}) }}
+        </div>
+        <div class="input-medium margin-top-10">
+            {{ form_widget(form.to, {'attr': {'class': 'form-control select2'}}) }}
+        </div>
+        <div class="input-medium margin-top-10">
+            {{ form_widget(form.result, {'attr': {'class': 'form-control select2'}}) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+
