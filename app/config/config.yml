@@ -77,7 +77,10 @@ nelmio_api_doc:
 
 fos_rest:
     param_fetcher_listener: true
+    body_listener: true
     routing_loader:
         default_format: json    # All responses should be JSON formated
         include_format: false   # We do not include format in request, so that all responses will eventually be JSON formatted
     
+fos_js_routing:
+    routes_to_expose: [currency_api_get_currency, currency_api_get_total]

@@ -16,6 +16,10 @@ class ApiService
     private $url = 'http://apilayer.net/api/';
     
     private $key;
+    
+    private $currencies = "ZAR,USD,GBP,EUR,KES";
+    
+    private $source = "ZAR";
 
     public function __construct($key)
     {
@@ -33,12 +37,14 @@ class ApiService
     {
         //build url
         $baseUrl = $this->url.$name;
+        
         $queryParts = array();
+        
         foreach ($parameters as $key => $value) {
             $queryParts[] = $key.'='.rawurlencode($value);
         }
-        $url =  $baseUrl.'?access_key='.$this->key.implode('&', $queryParts);
         
+        $url =  $baseUrl.'?access_key='.$this->key.'&'.implode('&', $queryParts);
         //query url
         $response = $this->browser->get($url);
         

@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12 page-404">
+            <div class="details">
+                <h3>Error!</h3>
+                <p>
+                    There was an unknown error (HTTP {{ status_code }})
+                    that prevented to complete your request.
+                </p>
+                <p>
+                    Try loading this page again in some minutes or
+                    <a href="{{ path('homepage') }}">go back to the homepage</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+

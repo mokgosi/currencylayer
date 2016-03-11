@@ -3,3 +3,4 @@ curr_api:
     prefix: /v1
     resource: "ApiBundle\Controller\ApiController"
     name_prefix:  currency_api_ #to avoid naming collision
+    

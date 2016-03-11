@@ -1,21 +1,105 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form 'form/form_errors.html.twig' %}
+
 {% block body %}
-
-    <div class="form-group">
-        {{ form_start(form,{'action': path('search')}) }}
-        <div class="input-medium margin-top-10">
-            {{ form_widget(form.from, {'attr': {'class': 'form-control select2'}}) }}
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}, 'action': path('homepage')}) }}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Currency:</label> 
+                {{ form_widget(form.currency, {'attr': {'class': 'form-control select2'}}) }}
+                {{ form_errors(form.currency) }}
+            </div>
         </div>
-        <div class="input-medium margin-top-10">
-            {{ form_widget(form.to, {'attr': {'class': 'form-control select2'}}) }}
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Amount:</label>
+                {{ form_widget(form.amountPurchased, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.amountPurchased) }}
+            </div>
         </div>
-        <div class="input-medium margin-top-10">
-            {{ form_widget(form.result, {'attr': {'class': 'form-control select2'}}) }}
-        </div>
-        {{ form_end(form) }}
     </div>
+    <div class="row">
+        <div class="col-md-3"> 
+            <div class="form-group">
+                <label>Exchange Rate:</label> {{ form_widget(form.exchangeRate, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="col-md-3"> 
+            <div class="form-group">
+                &nbsp;
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"> 
+            <div class="form-group">
+                <label>Surcharge Rate:</label> {{ form_widget(form.surchargeRate, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="col-md-3"> 
+            <div class="form-group">
+                <label>Surcharge Amount:</label> {{ form_widget(form.surchargeAmount, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3"> 
+            <div class="form-group">
+                <label>Additional Action:</label> {{ form_widget(form.additional, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+        <div class="col-md-3"> 
+            <div class="form-group">
+                <label>Total ZAR Amount:</label> {{ form_widget(form.amountPaid, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="form-actions right todo-form-actions">
+        {{ form_widget(form.submit, { 'attr': {'class': 'btn blue', 'label': 'Submit'} }) }}
+        <a href="{{ path('homepage') }}" class="btn btn-default">Cancel</a>
+    </div>        
 
+    {{ form_end(form) }}
+    <br>
+    <br>
+    <div class="portlet light " >
+        <div class="portlet-title">
+            <div class="caption font-dark">
+                <i class="icon-settings font-dark"></i>
+                <span class="caption-subject bold uppercase">Currency Orders History</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="sample_1">
+                <thead>
+                    <tr>
+                        <th class="all">Currency</th>
+                        <th class="all">Exchange Rate</th>
+                        <th class="all">Surcharge Rate</th>
+                        <th class="all">Amount</th>
+                        <th class="all">Surcharge</th>
+                        <th class="all">Total Amount</th>
+                        <th class="all">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ order.currency }}</td>
+                            <td>{{ order.exchangeRate }}</td>
+                            <td>{{ order.surchargeRate }}%</td>
+                            <td>{{ order.currency }} {{ order.amountPurchased }} </td>
+                            <td>ZAR {{ order.surchargeAmount }}</td>
+                            <td>ZAR {{ order.amountPaid }}</td>
+                            <td>{% if order.createdAt.timestamp %}{{ order.createdAt.timestamp|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
 
 

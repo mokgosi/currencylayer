@@ -3,10 +3,14 @@
 namespace AppBundle\Controller;
 
 use Buzz\Browser;
-use DateTime;
+use Buzz\Client\Curl;
+use Buzz\Message\Form;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Currency;
 
 class DefaultController extends Controller
 {
@@ -16,76 +20,64 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
-//        $currencies = $em->getRepository('AppBundle:Currency')->findBy(array(), array('id' => 'desc'));
-
-        $browser = new Browser();
-        
-        $response = $browser->get('http://apilayer.net/api/list?access_key=534871545e5d0de0a90259fe7d2b5795');
+        $browser = new Browser(new Curl());
+        $browser->getClient()->setIgnoreErrors(false);
 
         $form = $this->createFormBuilder()
-                ->add('from', 'entity', array(
-                    'class' => 'AppBundle:Currency',
-                    'property' => 'name'))
-                ->add('to', 'entity', array(
-                    'class' => 'AppBundle:Currency',
-                    'property' => 'name'))
-                ->add('result', 'text')
-                ->getForm();
-
-        return $this->render('default/index.html.twig', array(
-                    'base_dir' => realpath($this->getParameter('kernel.root_dir') . '/..'),
-                    'form' => $form->createView(),
-        ));
-    }
-
-    /**
-     * @Route("/search", name="search")
-     */
-    public function searchAction(Request $request)
-    {
-        $twitter = $this->get('endroid.twitter');
-
-        $em = $this->getDoctrine()->getManager();
-
-        $tweetStatuses = array();
-
-        $form = $this->createFormBuilder()
-                ->add('hashtag', 'text')
-                ->add('search', 'submit')
+                ->add('currency', 'entity', array(
+                    'placeholder' => 'Choose currency',
+                    'class' => 'ApiBundle:Currency',
+                    'property' => 'name',
+                    'constraints' => array(new NotBlank(array('message' => 'Please select currency')))))
+                ->add('exchangeRate', 'text', array('read_only' => true))
+                ->add('surchargeRate', 'text', array('read_only' => true))
+                ->add('amountPurchased', 'text', array('constraints' => array(
+                        new NotBlank())))
+                ->add('additional', 'text', array('read_only' => true))
+                ->add('amountPaid', 'text', array('read_only' => true))
+                ->add('surchargeAmount', 'text', array('read_only' => true))
+                ->add('submit', 'submit')
                 ->getForm();
 
         $form->handleRequest($request);
 
+        $payload = array();
+
         if ($form->isValid()) {
             $data = $form->getData();
+            $currency = $data['currency'];
+            $order = array(
+                'order' => array(
+                    'currency' => $currency->getCode(),
+                    'exchangeRate' => $data['exchangeRate'],
+                    'surchargeRate' => $data['surchargeRate'],
+                    'amountPurchased' => $data['amountPurchased'],
+                    'amountPaid' => $data['amountPaid'],
+                    'surchargeAmount' => $data['surchargeAmount'],
+            ));
 
-            $response = $twitter->query("search/tweets", 'GET', 'json', array('q' => $data['hashtag']));
+            $url = "http://currenzyworks/api/v1/orders";
+            $headers = array(
+                'Content-Type' => 'application/json',
+            );
 
-            $tweets = json_decode($response->getContent());
+            $response = $browser->post($url, $headers, json_encode($order));
 
-            foreach ($tweets->statuses as $key => $tweet) {
-
-                $entity = new Tweet();
-                $entity->setText($tweet->text);
-                $entity->setCreatedAt(new DateTime($tweet->created_at));
-                $entity->setUserName($tweet->user->name);
-                $entity->setScreenName($tweet->user->name);
-                $entity->setProfileImg($tweet->user->profile_image_url);
-                $entity->setRetweetCount($tweet->retweet_count);
-                $entity->setFavouriteCount($tweet->favorite_count);
-                $entity->setGeo($tweet->geo);
-                $em->persist($entity);
+            if ($response->getStatusCode() == 200) {
+                $this->addFlash('success', 'The item was created successfully.');
             }
-            $em->flush();
-            $em->clear();
-            $tweetStatuses = $tweets->statuses;
+
+            return $this->redirectToRoute('homepage', array('response' => $response), 301);
         }
-        return $this->render('default/search.html.twig', array(
+        
+        $orders = $browser->get("http://currenzyworks/api/v1/orders");
+
+        $orderss = json_decode($orders->getContent());
+
+        return $this->render('default/index.html.twig', array(
                     'base_dir' => realpath($this->getParameter('kernel.root_dir') . '/..'),
                     'form' => $form->createView(),
-                    'tweets' => $tweetStatuses
+                    'orders' => $orderss
         ));
     }
 
