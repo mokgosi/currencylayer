@@ -90,8 +90,8 @@
                         <tr>
                             <td>{{ order.currency }}</td>
                             <td>{{ order.exchangeRate }}</td>
-                            <td>{{ order.surchargeRate }}%</td>
-                            <td>{{ order.currency }} {{ order.amountPurchased }} </td>
+                            <td>{{ order.surchargeRate|number_format }}%</td>
+                            <td>{{ order.currency }} {{ order.amountPurchased|number_format(2) }} </td>
                             <td>ZAR {{ order.surchargeAmount }}</td>
                             <td>ZAR {{ order.additional.discountAmount }}</td>
                             <td>ZAR {{ order.amountPaid }}</td>

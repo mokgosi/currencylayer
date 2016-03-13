@@ -51,9 +51,9 @@ class DefaultController extends Controller
                     'currency' => $currency->getCode(),
                     'exchangeRate' => $data['exchangeRate'],
                     'surchargeRate' => $data['surchargeRate'],
-                    'amountPurchased' => $data['amountPurchased'],
-                    'amountPaid' => $data['amountPaid'],
-                    'surchargeAmount' => $data['surchargeAmount'],
+                    'amountPurchased' => number_format($data['amountPurchased'], 2, '.', ''),
+                    'amountPaid' => number_format($data['amountPaid'], 2, '.', ''),
+                    'surchargeAmount' => number_format($data['surchargeAmount'], 2, '.', ''),
             ));
 
             $url = "http://currenzyworks/api/v1/orders";

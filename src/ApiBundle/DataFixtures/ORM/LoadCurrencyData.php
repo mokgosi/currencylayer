@@ -16,7 +16,7 @@ class LoadCurrencyData  extends AbstractFixture  implements OrderedFixtureInterf
         $currencies = array('USD' =>'United States Dollar', 'GBP'=>'British Pound Sterling', 'EUR'=>'Euro', 'KES' => 'Kenyan Shilling');
         $rates      = array('USD' =>'0.0808279', 'GBP'=>'0.0527032', 'EUR'=>'0.0718710', 'KES' => '7.81498');
         $surcharge  = array('USD' =>'7.5', 'GBP'=>'5', 'EUR'=>'5', 'KES' => '2.5');
-        $additional = array('USD' =>'null', 'GBP'=>'email', 'EUR'=>'discount - 2%', 'KES' => 'null');
+        $additional = array('USD' =>'null', 'GBP'=>'email', 'EUR'=>'discount - 2%', 'KES' => 'no action');
         
         foreach ($currencies as $key => $value) {
             $rate = new \ApiBundle\Entity\Currency();
