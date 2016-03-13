@@ -1,4 +1,4 @@
-# todo
+# currencyworkz
 
 TECHNOLOGIES USED
 
@@ -17,7 +17,7 @@ Then cd to "currencyworkz" and run the following composer command to install ven
 Then open app/config/parameters.yml and change the following to your settings
     database_host: 127.0.0.1
     database_port: 3306
-    database_name: todo
+    database_name: currencyworkz
     database_user: root
     database_password: null
 
