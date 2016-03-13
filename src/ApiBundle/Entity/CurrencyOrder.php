@@ -27,7 +27,7 @@ class CurrencyOrder
     /**
      * @var string
      *
-     * @ORM\Column(name="currency", type="string", length=255)
+     * @ORM\Column(name="currency", type="string", length=3)
      * @Assert\NotBlank()
      * 
      */
@@ -36,38 +36,38 @@ class CurrencyOrder
     /**
      * @var float
      *
-     * @ORM\Column(name="exchange_rate", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="exchange_rate", type="decimal", precision=10, scale=6)
      * @Assert\NotBlank()
      */
     private $exchangeRate;
 
     /**
-     * @var float
+     * @var decimal
      *
-     * @ORM\Column(name="surcharge_rate", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="surcharge_rate", type="decimal", precision=10, scale=6)
      * @Assert\NotBlank()
      */
     private $surchargeRate;
 
     /**
-     * @var float
+     * @var decimal
      *
-     * @ORM\Column(name="amount_purchased", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="amount_purchased", type="decimal", precision=10, scale=6)
      * @Assert\NotBlank()
      */
     private $amountPurchased;
 
     /**
-     * @var float
+     * @var decimal
      *
-     * @ORM\Column(name="amount_paid", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="amount_paid", type="decimal", precision=10, scale=6)
      */
     private $amountPaid;
 
     /**
-     * @var float
+     * @var decimal
      *
-     * @ORM\Column(name="surcharge_amount", type="decimal", precision=10, scale=2)
+     * @ORM\Column(name="surcharge_amount", type="decimal", precision=10, scale=6)
      */
     private $surchargeAmount;
 
@@ -80,7 +80,7 @@ class CurrencyOrder
     private $createdAt;
 
     /**
-     * @ORM\OneToOne(targetEntity="Additional", inversedBy="order")
+     * @ORM\OneToOne(targetEntity="Additional")
      */
     private $additional;
 
@@ -181,7 +181,7 @@ class CurrencyOrder
      *
      * @return float 
      */
-    public function getAmountPurchased()
+        public function getAmountPurchased()
     {
         return $this->amountPurchased;
     }
@@ -275,7 +275,7 @@ class CurrencyOrder
     public function setAdditional(\ApiBundle\Entity\Additional $additional = null)
     {
         $this->additional = $additional;
-        $additional->setOrder($this);
+//        $additional->setOrder($this);
         return $this;
     }
 

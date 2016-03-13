@@ -80,6 +80,7 @@
                         <th class="all">Surcharge Rate</th>
                         <th class="all">Amount</th>
                         <th class="all">Surcharge</th>
+                        <th class="all">Discount</th>
                         <th class="all">Total Amount</th>
                         <th class="all">Date</th>
                     </tr>
@@ -92,6 +93,7 @@
                             <td>{{ order.surchargeRate }}%</td>
                             <td>{{ order.currency }} {{ order.amountPurchased }} </td>
                             <td>ZAR {{ order.surchargeAmount }}</td>
+                            <td>ZAR {{ order.additional.discountAmount }}</td>
                             <td>ZAR {{ order.amountPaid }}</td>
                             <td>{% if order.createdAt.timestamp %}{{ order.createdAt.timestamp|date('Y-m-d H:i:s') }}{% endif %}</td>
                         </tr>

@@ -12,4 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class CurrencyOrderRepository extends EntityRepository
 {
+
+    public function getOrders()
+    {
+        $results = $this->getEntityManager()
+                ->createQuery(
+                        'SELECT o, a.discountAmount '
+                        . 'FROM ApiBundle:CurrencyOrder o '
+                        . 'LEFT JOIN ApiBundle:Additional a With o.id = a.currencyOrderId '
+                        . 'ORDER BY o.id DESC')
+                ->getResult(1);
+        dump($results);
+        return $results;
+    }
+
 }

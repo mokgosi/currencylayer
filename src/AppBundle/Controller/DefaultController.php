@@ -41,7 +41,7 @@ class DefaultController extends Controller
 
         $form->handleRequest($request);
 
-        $payload = array();
+        
 
         if ($form->isValid()) {
             $data = $form->getData();
@@ -72,12 +72,12 @@ class DefaultController extends Controller
         
         $orders = $browser->get("http://currenzyworks/api/v1/orders");
 
-        $orderss = json_decode($orders->getContent());
+        $entities = json_decode($orders->getContent());
 
         return $this->render('default/index.html.twig', array(
                     'base_dir' => realpath($this->getParameter('kernel.root_dir') . '/..'),
                     'form' => $form->createView(),
-                    'orders' => $orderss
+                    'orders' => $entities
         ));
     }
 

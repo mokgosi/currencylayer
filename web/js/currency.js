@@ -3,7 +3,7 @@ $(document).ready(function () {
         placeholder: "Choose currency",
         allowClear: true
     });
-    
+
     $(document).on('change', '#form_currency', function () {
         $(this).closest('form').find("input[type=text]").val("");
         var url = Routing.generate('currency_api_get_currency', {'id': $(this).val()});
@@ -22,6 +22,12 @@ $(document).ready(function () {
     });
 
     $(document).on('keyup', '#form_amountPurchased', function () {
+
+        if (!$('#form_currency').val()) {
+            alert('Please select currecy.');
+            return;
+        }
+
         var url = Routing.generate('currency_api_get_total');
 
         var values = {

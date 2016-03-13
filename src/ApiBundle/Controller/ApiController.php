@@ -154,13 +154,11 @@ class ApiController extends FOSRestController
             $order = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $currency = $em->getRepository('ApiBundle:Currency')->findOneBy(array('code' => $order->getCurrency()));
-            $em->persist($order);
             if (preg_match('/^discount/', $currency->getAdditional())) {
-                $discount = new Additional();
-                $discount->setCurrencyOrder($order);
-                $discount->setDiscountAmount(300);
-                $em->persist($discount);
+                $discount = $this->createDiscount($order,$currency);
+                $order->setAdditional($discount);
             }
+            $em->persist($order);
             $em->flush();
             $view = $this->view($order);
             return $this->handleView($view);
@@ -170,17 +168,18 @@ class ApiController extends FOSRestController
         return $this->handleView($view);
     }
 
-    public function createDiscount($order, $amount, $additional)
+    public function createDiscount($order,$currency)
     {
         $em = $this->getDoctrine()->getManager();
-
         $discount = new Additional();
-        $discount->setCurrencyOrder($order);
-        $discountAmount = $this->calculateDiscountAmount($amount, $additional);
+        $exchangeAmount = $this->calculateBaseAmount($order->getAmountPurchased(), $order->getExchangeRate());
+        $surchargeAmount = $this->calculateSurchargeAmount($order->getSurchargeRate(), $exchangeAmount);
+        $surchargedTotal = $this->calculateSurchargedTotal($exchangeAmount, $surchargeAmount);
+        $discountAmount = $this->calculateDiscountAmount($surchargedTotal, $currency->getAdditional());
         $discount->setDiscountAmount($discountAmount);
-
         $em->persist($discount);
         $em->flush();
+        return $discount;
     }
 
     /**

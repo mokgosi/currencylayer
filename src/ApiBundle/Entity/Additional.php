@@ -22,26 +22,12 @@ class Additional
     private $id;
 
     /**
-     * @var int
+     * @var decimal
      *
-     * @ORM\Column(name="currency_order_id", type="integer")
-     */
-    private $orderId;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="discount_amount", type="float")
+     * @ORM\Column(name="discount_amount", type="decimal", precision=10, scale=6)
      */
     private $discountAmount;
     
-    /**
-     * @ORM\OneToOne(targetEntity="CurrencyOrder", mappedBy="additional")
-     * @ORM\JoinColumn(name="currency_order_id", referencedColumnName="id")
-     */
-    private $order;
-
-
     /**
      * Get id
      *
@@ -73,28 +59,5 @@ class Additional
     public function getDiscountAmount()
     {
         return $this->discountAmount;
-    }
-
-    /**
-     * Set order
-     *
-     * @param \ApiBundle\Entity\CurrencyOrder $order
-     * @return Additional
-     */
-    public function setCurrencyOrder(\ApiBundle\Entity\CurrencyOrder $order = null)
-    {
-        $this->order = $order;
-
-        return $this;
-    }
-
-    /**
-     * Get order
-     *
-     * @return \ApiBundle\Entity\CurrencyOrder 
-     */
-    public function getCurrencyOrder()
-    {
-        return $this->order;
     }
 }
