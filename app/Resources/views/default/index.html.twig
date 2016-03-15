@@ -93,7 +93,7 @@
                             <td>{{ order.surchargeRate|number_format }}%</td>
                             <td>{{ order.currency }} {{ order.amountPurchased|number_format(2) }} </td>
                             <td>ZAR {{ order.surchargeAmount }}</td>
-                            <td>ZAR {{ order.additional.discountAmount }}</td>
+                            <td>{% if order.additional  %} ZAR {{ order.additional.discountAmount }} {% endif %}</td>
                             <td>ZAR {{ order.amountPaid }}</td>
                             <td>{% if order.createdAt.timestamp %}{{ order.createdAt.timestamp|date('Y-m-d H:i:s') }}{% endif %}</td>
                         </tr>

@@ -19,10 +19,11 @@ class CurrencyOrderRepository extends EntityRepository
                 ->createQuery(
                         'SELECT o, a.discountAmount '
                         . 'FROM ApiBundle:CurrencyOrder o '
-                        . 'LEFT JOIN ApiBundle:Additional a With o.id = a.currencyOrderId '
+                        . 'LEFT JOIN ApiBundle:Additional a With a.id = o.additional '
                         . 'ORDER BY o.id DESC')
-                ->getResult(1);
-        dump($results);
+                ->getSQL();
+//                ->getResult();
+        die($results);
         return $results;
     }
 
