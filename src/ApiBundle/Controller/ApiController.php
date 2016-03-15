@@ -119,8 +119,7 @@ class ApiController extends FOSRestController
     public function getOrdersAction()
     {
         $em = $this->getDoctrine()->getManager();
-//        $currencies = $em->getRepository('ApiBundle:CurrencyOrder')->findBy(array(), array('createdAt' => 'DESC'));
-        $currencies = $em->getRepository('ApiBundle:CurrencyOrder')->getOrders();
+        $currencies = $em->getRepository('ApiBundle:CurrencyOrder')->findBy(array(), array('id' => 'DESC'));
         $view = $this->view($currencies);
         return $this->handleView($view);
     }
