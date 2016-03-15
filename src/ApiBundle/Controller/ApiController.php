@@ -19,51 +19,6 @@ class ApiController extends FOSRestController
 {
 
     /**
-     * This method gets a list of latest exchange rates from Fixer.io and updates
-     * local stored rates.
-     * 
-     * Fixer.io is a free JSON API for current and historical foreign exchange 
-     * rates published by the European Central Bank.
-     * 
-     * The rates are updated daily around 3PM CET
-     *
-     * @ApiDoc(
-     *   resource=true,
-     *   description="This is a description of your API method.",
-     *   https=true
-     * )
-     */
-    public function getListAction()
-    {
-        $currencyService = $this->get('api_layer');
-        $response = $currencyService->query('latest');
-        $view = $this->view($response);
-        return $this->handleView($view);
-    }
-
-    public function putListAction()
-    {
-        $currencyService = $this->get('api_layer');
-        $response = $currencyService->query('latest');
-        $list = json_decode($response->getContent());
-        $em = $this->getDoctrine()->getManager();
-
-        foreach ($list->rates as $key => $item) {
-            $entity = new Currency();
-            $entity->setCode($key);
-            $entity->setName($item);
-            $entity->setCreatedAt(new \DateTime());
-            $entity->setUpdatedAt(new \DateTime());
-            $em->persist($entity);
-        }
-        $em->flush();
-        $em->clear();
-
-        $view = $this->view($response);
-        return $this->handleView($view);
-    }
-
-    /**
      * This is the documentation description of your method, it will appear
      * on a specific pane. It will read all the text until the first
      * annotation.
@@ -83,26 +38,25 @@ class ApiController extends FOSRestController
     }
 
     /**
-     * Get currency by id
+     * Get currency by code
      *
      * @ApiDoc(
      *   resource=true,
-     *   description="This method returns a single currency using id",
+     *   description="This method returns a single currency using currency 3 letter code. e.g. USD",
      *   requirements={
      *      {
-     *          "name"="id",
-     *          "dataType"="integer",
-     *          "requirement"="\d+",
-     *          "description"="currency id"
+     *          "name"="code",
+     *          "dataType"="string",
+     *          "description"="currency 3 letter code"
      *      }
      *   },
      *   https=true
      * )
      */
-    public function getCurrencyAction($id)
+    public function getCurrencyAction($code)
     {
         $em = $this->getDoctrine()->getManager();
-        $currency = $em->getRepository('ApiBundle:Currency')->findOneBy(array('id' => $id));
+        $currency = $em->getRepository('ApiBundle:Currency')->findOneBy(array('code' => $code));
         $view = $this->view($currency);
         return $this->handleView($view);
     }
@@ -155,7 +109,7 @@ class ApiController extends FOSRestController
             $em = $this->getDoctrine()->getManager();
             $currency = $em->getRepository('ApiBundle:Currency')->findOneBy(array('code' => $order->getCurrency()));
             if (preg_match('/^discount/', $currency->getAdditional())) {
-                $discount = $this->createDiscount($order,$currency);
+                $discount = $this->createDiscount($order, $currency);
                 $order->setAdditional($discount);
             }
             $em->persist($order);
@@ -168,7 +122,7 @@ class ApiController extends FOSRestController
         return $this->handleView($view);
     }
 
-    public function createDiscount($order,$currency)
+    public function createDiscount($order, $currency)
     {
         $em = $this->getDoctrine()->getManager();
         $discount = new Additional();
