@@ -28,6 +28,23 @@ Then run currencyworkz.sql to create tables and populate the db with test data.
 
 ==
 
+VIRTUAL HOSTS
+
+Please setup your virtual host like/on in line with this:
+
+<VirtualHost *:80>
+    ServerName currenzyworks
+    ServerAlias currenzyworks
+
+    DocumentRoot C:\xampp\htdocs\currenzyworks\web
+    
+    <Directory C:\xampp\htdocs\currenzyworks\web>
+        AllowOverride All
+        Order Allow,Deny
+        Allow from All
+    </Directory>
+</VirtualHost>
+
 RUNNING & TESTING THE APP
 
 Open console, cd to into currencyworkz folder and run the following command
