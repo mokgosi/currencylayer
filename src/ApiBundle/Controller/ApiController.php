@@ -45,18 +45,19 @@ class ApiController extends FOSRestController
      *   description="This method returns a single currency using currency 3 letter code. e.g. USD",
      *   requirements={
      *      {
-     *          "name"="code",
-     *          "dataType"="string",
-     *          "description"="currency 3 letter code"
+     *          "name"="id",
+     *          "dataType"="integer",
+     *          "requirement"="\d+",
+     *          "description"="currency id"
      *      }
      *   },
      *   https=true
      * )
      */
-    public function getCurrencyAction($code)
+    public function getCurrencyAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $currency = $em->getRepository('ApiBundle:Currency')->findOneBy(array('code' => $code));
+        $currency = $em->getRepository('ApiBundle:Currency')->findOneBy(array('id' => $id));
         $view = $this->view($currency);
         return $this->handleView($view);
     }
